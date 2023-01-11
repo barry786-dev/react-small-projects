@@ -1,38 +1,53 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 const SimpleInput = (props) => {
   // const nameInput = useRef();
   const [enteredName, setEnteredName] = useState('');
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
+  // const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  useEffect(() => {
+  const enteredNameIsValid = enteredName.trim() !== '';
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
+  /* useEffect(() => {
     if (enteredNameIsValid) {
       console.log('Input is valid!');
     }
-  }, [enteredNameIsValid]);
+  }, [enteredNameIsValid]); */
 
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
+    // if (event.target.value.trim() !== '') {
+    //   setEnteredNameIsValid(true);
+    // }
+  };
+
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouched(true);
+    // if (enteredName.trim() === '') {
+    //   setEnteredNameIsValid(false);
+    // }
   };
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
     setEnteredNameTouched(true);
-    if (enteredName.trim() === '') {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
-    setEnteredNameIsValid(true);
+    // if (enteredName.trim() === '') {
+    //   setEnteredNameIsValid(false);
+    //   return;
+    // }
+    // setEnteredNameIsValid(true);
     console.log(enteredName);
     // const enteredValue = nameInput.current.value;
     // console.log(enteredValue);
 
     // nameInput.current.value = '';
     setEnteredName('');
+    setEnteredNameTouched(false);
   };
-
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const nameInputClasses = nameInputIsInvalid
     ? 'form-control invalid'
@@ -46,6 +61,7 @@ const SimpleInput = (props) => {
           type='text'
           id='name'
           onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
           // ref={nameInput}
           value={enteredName}
         />
